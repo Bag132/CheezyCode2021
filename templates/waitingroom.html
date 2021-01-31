@@ -1,0 +1,113 @@
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <script src="{{url_for('static', filename='jquery-3.4.1.js')}}"></script>
+    <!-- The core Firebase JS SDK is always required and must be listed first -->
+    <script src="https://www.gstatic.com/firebasejs/8.2.5/firebase-app.js"></script>
+
+    <!-- TODO: Add SDKs for Firebase products that you want to use
+     https://firebase.google.com/docs/web/setup#available-libraries -->
+    <script src="https://www.gstatic.com/firebasejs/8.2.5/firebase-analytics.js"></script>
+
+    <script src="/__/firebase/8.2.5/firebase-app.js"></script>
+
+    <!-- If you enabled Analytics in your project, add the Firebase SDK for Analytics -->
+    <script src="/__/firebase/8.2.5/firebase-analytics.js"></script>
+
+    <!-- Add Firebase products that you want to use -->
+    <script src="/__/firebase/8.2.5/firebase-auth.js"></script>
+
+
+    <script>
+        // Your web app's Firebase configuration
+        // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+        var firebaseConfig = {
+            apiKey: "AIzaSyBzhhr40AY_pBS23FSB2AbmlA5veGsFJZg",
+            authDomain: "checkmein-eafcc.firebaseapp.com",
+            databaseURL: "https://checkmein-eafcc-default-rtdb.firebaseio.com",
+            projectId: "checkmein-eafcc",
+            storageBucket: "checkmein-eafcc.appspot.com",
+            messagingSenderId: "96390213922",
+            appId: "1:96390213922:web:55e4fbcd460a1e5760f57b",
+            measurementId: "G-L8LFY980VT"
+        };
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+        firebase.analytics();
+        var database = firebase.database();
+    </script>
+
+    <script>
+        $(document).ready(function () {
+
+            function main() {
+                alert('In main()')
+
+                firebase.auth().signInAnonymously()
+                    .then(() => {
+                        alert("Signed In")
+                    })
+                    .catch((error) => {
+                        var errorCode = error.code;
+                        var errorMessage = error.message;
+                        alert("error signing in " + errorMessage)
+                        // ...
+                    });
+
+
+
+                var storename = document.getElementById("storeid").innerHTML;
+                var name_ = document.getElementById("nameid").innerHTML;
+                var size_ = document.getElementById("sizeid").innerHTML;
+
+
+                firebase.database.ref('stores/' + storename + '/new-customer').set({
+                    name: name_,
+                    size: size_
+                }).then(function () {
+                    alert('Synchronization succeeded');
+                })
+                    .catch(function (error) {
+                        alert('Synchronization failed: ' + error);
+                    });
+
+                var inStore = firebase.database().ref('stores/' + storename);
+                inStore.on('in-store', (snapshot) => {
+                    snapshot.forEach(function (childSnapshot) {
+                        console.log(childSnapshot.key())
+                        console.log('\t' + childSnapshot.val())
+                    })
+                })
+            }
+            main()
+        })
+
+    </script>
+        <script src="/__/firebase/init.js"></script>
+
+</head>
+
+<body>
+    <script src="/__/firebase/8.2.5/firebase-app.js"></script>
+
+    <!-- If you enabled Analytics in your project, add the Firebase SDK for Analytics -->
+    <script src="/__/firebase/8.2.5/firebase-analytics.js"></script>
+
+    <!-- Add Firebase products that you want to use -->
+    <script src="/__/firebase/8.2.5/firebase-auth.js"></script>
+
+    <h1 id="storeid" style="text-align: center;">{{storename}}</h1>
+    <p>&nbsp;</p>
+    <p style="text-align: center;"><img src="https://www.jimphicdesigns.com/downloads/imgs-mockup/hourglass.gif" alt=""
+            width="232" height="232" /></p>
+    <p style="text-align: center;">&nbsp;</p>
+    <h2 style="text-align: center;">Please wait, you will be able to enter shortly...</h2>
+    <p>&nbsp;</p>
+    <p>&nbsp;</p>
+    <script src="/__/firebase/init.js"></script>
+</body>
+<p style="text-align: center;" id="nameid">{{name}}</p>
+<p style="text-align: center;" id="sizeid">{{size}}</p>
+
+</html>

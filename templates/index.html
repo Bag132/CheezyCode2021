@@ -1,0 +1,78 @@
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <style type="text/css">
+
+    </style>
+
+    <script src="{{url_for('static', filename='jquery-3.4.1.js')}}"></script>
+    <!-- The core Firebase JS SDK is always required and must be listed first -->
+    <script src="https://www.gstatic.com/firebasejs/8.2.5/firebase-app.js"></script>
+
+    <!-- TODO: Add SDKs for Firebase products that you want to use
+     https://firebase.google.com/docs/web/setup#available-libraries -->
+    <script src="https://www.gstatic.com/firebasejs/8.2.5/firebase-analytics.js"></script>
+
+    <script>
+        // Your web app's Firebase configuration
+        // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+        var firebaseConfig = {
+            apiKey: "AIzaSyBzhhr40AY_pBS23FSB2AbmlA5veGsFJZg",
+            authDomain: "checkmein-eafcc.firebaseapp.com",
+            databaseURL: "https://checkmein-eafcc-default-rtdb.firebaseio.com",
+            projectId: "checkmein-eafcc",
+            storageBucket: "checkmein-eafcc.appspot.com",
+            messagingSenderId: "96390213922",
+            appId: "1:96390213922:web:55e4fbcd460a1e5760f57b",
+            measurementId: "G-L8LFY980VT"
+        };
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+        firebase.analytics();
+
+        firebase.auth().signInWithEmailAndPassword('placeholder@gmail.com', 'pword2')
+            .catch(function (error) {
+                // Handle Errors here.
+                var errorCode = error.code;
+                var errorMessage = error.message;
+                if (errorCode === 'auth/wrong-password') {
+                    alert('Wrong password.');
+                } else {
+                    alert(errorMessage);
+                }
+                console.log(error);
+            });
+        var database = firebase.database();
+    </script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $("#submitBtn").click(function () {
+                alert(document.getElementById("storenam").innerHTML)
+                var storename = $("storenam").val();
+                alert('storename = ' + storename)
+                var name = $("#nam").val();
+                var size = $("#siz").val();
+                var url = 'http://10.0.0.55:5000/waitingroom?storename=' + '{{storename}}' + '&name=' + name + '&size=' + size;
+                window.location.assign(url);
+            });
+        })
+
+    </script>
+</head>
+
+<body>
+    <h1 id="storenam" style="text-align: center;">{{storename}}</h1>
+    <p>&nbsp;</p>
+    <h3 style="text-align: center;">Please enter your or your group's name</h3>
+    <div style="text-align: center;"><input id="nam" style="text-align: center;" type="text" /></div>
+    <p>&nbsp;</p>
+    <h3 style="text-align: center;">Enter the number of people in your group</h3>
+    <div style="text-align: center;"><input id="siz" style="text-align: center;" type="text" /></div>
+    <p>&nbsp;</p>
+    <div style="text-align:center;">
+        <button id="submitBtn" type="button" idonclick="goToWaitingRoom()">Submit</button>
+    </div>
+</body>
+
+</html>
